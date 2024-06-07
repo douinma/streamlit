@@ -1,3 +1,5 @@
+import streamlit as st
+
 def calculate_cpf(age, salary):
     # CPF contribution rates
     employee_rate = 0.0
@@ -20,7 +22,7 @@ def calculate_cpf(age, salary):
         employee_rate = 0.0
         employer_rate = 0.0
     else:
-        print("Minimum age for CPF contribution is 16.")
+        st.error("Minimum age for CPF contribution is 16.")
         return
 
     # Compute contributions
@@ -29,14 +31,18 @@ def calculate_cpf(age, salary):
 
     return employee_contribution, employer_contribution
 
-# Prompt user for age and salary
-age = int(input("What is your age: "))
-salary = float(input("What is your monthly salary: "))
+def main():
+    st.title("CPF Contribution Calculator")
+    age = st.number_input("What is your age?", min_value=16, step=1)
+    salary = st.number_input("What is your monthly salary?", min_value=0.01, step=0.01)
 
-# Check if age is valid for CPF contribution
-if age >= 16:
-    employee_cpf, employer_cpf = calculate_cpf(age, salary)
-    print("Employee CPF contribution is:", employee_cpf)
-    print("Employer CPF contribution is:", employer_cpf)
-else:
-    print("Minimum age for CPF contribution is 16.")
+    if st.button("Calculate"):
+        if age >= 16:
+            employee_cpf, employer_cpf = calculate_cpf(age, salary)
+            st.write("Employee CPF contribution is:", employee_cpf)
+            st.write("Employer CPF contribution is:", employer_cpf)
+        else:
+            st.error("Minimum age for CPF contribution is 16.")
+
+if __name__ == "__main__":
+    main()
